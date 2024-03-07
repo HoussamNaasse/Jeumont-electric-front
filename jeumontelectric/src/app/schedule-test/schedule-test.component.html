@@ -1,0 +1,69 @@
+<div>
+  <div class="flex items-center justify-center gap-4 mb-1">
+    <button class="header-buttons-item" (click)="toggleAddEvent()">Add to planning</button>
+  </div>
+  <ejs-schedule #scheduleObj width='100%' height='700px' [allowInline]="allowInline" [eventSettings]="eventSettings"
+    [selectedDate]="selectedDate" [group]="group" cssClass="quick-info-popup" [readonly]="true">
+    <e-resources>
+      <e-resource field='EmployeeId' title='Employees' name='Employee' [allowMultiple]='allowMultiple'
+        [dataSource]='employeeDataSource' textField='Name' idField='Id' groupIDField="GroupId" colorField='Color'>
+      </e-resource>
+    </e-resources>
+  </ejs-schedule>
+</div>
+
+<div *ngIf="isAddEventVisible" class="fixed inset-0 bg-black opacity-50 z-40"></div>
+<div *ngIf="isAddEventVisible" class="font-bold absolute top-1/3 left-1/2 rounded-[20px] transform -translate-x-1/2 border border-solid border-[#E30039] bg-white z-50 py-2 shadow-lg ">
+  <div class="flex justify-between px-4 py-1">
+    <div></div>
+    <div>
+      <h1 class="font-bold mb-1">Add to planning file</h1>
+    </div>
+    <div>
+      <img alt="Close" src="assets/icons/close.png" class="w-4 h-4 cursor-pointer" (click)="toggleAddEvent()" />
+    </div>
+  </div>   
+  <div class="px-2">
+    <div class="w-[20rem]">
+      <div class="flex justify-between items-center mb-2">
+        <label class="page-title">Week Number</label>
+        <select class="creation-item-select " [(ngModel)]="idWeek">
+          <option value="0" selected>None</option>
+          <ng-container *ngFor="let week of weeks">
+            <option *ngIf="week.week_id >= currentWeek" [value]="week.week_id">{{ week.week_label }}</option>
+          </ng-container>
+        </select>
+      </div>
+      <div class="flex justify-between items-center mb-2">
+        <label class="page-title">Year Number</label>
+        <select class="creation-item-select" [(ngModel)]="idYear">
+          <option value="0" selected>None</option>
+          <ng-container *ngFor="let year of years">
+            <option *ngIf="year.year_id >= currentYear" [value]="year.year_id">{{ year.year_label }}</option>
+          </ng-container>
+        </select>
+      </div>
+      <div class="flex justify-between items-center mb-2">
+        <label class="page-title">User</label>
+        <select class="creation-item-select" [(ngModel)]="userId">
+          <option value="" selected>None</option>
+          <ng-container *ngFor="let user of addToBackUp">
+            <option [value]="user.Id">{{ user.Name }}</option>
+          </ng-container>
+        </select>
+      </div>
+      <div class="flex justify-between items-center mb-2">
+        <label class="page-title">Primary </label>
+        <input type="checkbox" [(ngModel)]="primary_backup" />
+      </div>
+      <div class="flex justify-between items-center mb-2">
+        <label class="page-title">Emergency </label>
+        <input type="checkbox" [(ngModel)]="emergency_backup" />
+      </div>
+    </div>
+    <div class="flex justify-between items-center mb-2">
+      <button class="header-buttons-item">Cancel</button>
+      <button (click)="onAddToPlanning()" class="header-buttons-item">Add</button>
+    </div>
+  </div>   
+</div>

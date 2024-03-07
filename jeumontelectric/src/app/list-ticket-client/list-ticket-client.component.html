@@ -1,0 +1,190 @@
+<div class="font-inter bg-[#D9D9D9] h-full mx-2 py-2">
+    <div class="h-1/6 grid lg:grid-cols-5 gap-4 px-4 lg:px-10 pt-4 pb-2">
+        <div class="lg:col-span-2">
+            <div class="mt-2 w-full flex justify-between items-center bg-white rounded-[20px] py-2 px-4 font-semibold">
+                <h2
+                    class="cursor-pointer"
+                    (click)="sort('asked_ref')"
+                >
+                    Name
+                    <div class="absolute" *ngIf="selectedOption === 'asked_ref'">
+                        <img
+                            src="assets/icons/iconTop.png"
+                            alt=""
+                        />
+                    </div>
+                </h2>
+                <h2
+                    class="cursor-pointer"
+                    (click)="sort('asked_created_date')"
+                >
+                    Creation date
+                    <div class="absolute" *ngIf="selectedOption === 'asked_created_date'">
+                        <img
+                            src="assets/icons/iconTop.png"
+                            alt=""
+                        />
+                    </div>
+                </h2>
+                <h2
+                    class="cursor-pointer"
+                    (click)="sort('asked_updated_date')"
+                >
+                    Last update
+                    <div class="absolute" *ngIf="selectedOption === 'asked_updated_date'">
+                        <img
+                            src="assets/icons/iconTop.png"
+                            alt=""
+                        />
+                    </div>
+                </h2>
+                <h2
+                    class="cursor-pointer"
+                >
+                    Type
+                    <div class="absolute" *ngIf="selectedOption === 'type'">
+                        <img
+                            src="assets/icons/iconTop.png"
+                            alt=""
+                        />
+                    </div>
+                </h2>
+                <h2
+                    class="cursor-pointer"
+                    (click)="sort('ship')"
+                >
+                    Ship
+                    <div class="absolute" *ngIf="selectedOption === 'ship'">
+                        <img
+                            src="assets/icons/iconTop.png"
+                            alt=""
+                        />
+                    </div>
+                </h2>
+            </div>
+        </div>
+        <div class="flex justify-center items-center relative col-span-1">
+            <input
+                class="rounded-[10px] h-[35px] py-2 px-4  w-[100%] border border-solid"
+                placeholder="Research"
+                [(ngModel)]="searchDescription"
+            />
+            <img
+                alt="loupe"
+                src="assets/icons/loupe.png"
+                class="-ml-12 h-5 my-2 cursor-pointer"
+                (click)="search()"
+            />
+        </div>
+        <div class="lg:col-span-1 flex justify-center items-center">
+            <div class="mr-4 flex items-center justify-center">
+                <label class="mr-2">Asc</label>
+                <input type="radio" name="sortOption" [(ngModel)]="selectedOptionSort" (ngModelChange)="onSortOptionChange()" value="asc" />
+            </div>
+            <div class="flex items-center justify-center">
+                <label class="mr-2">Desc</label>
+                <input type="radio" name="sortOption" [(ngModel)]="selectedOptionSort" (ngModelChange)="onSortOptionChange()" value="desc" />
+            </div>
+        </div>       
+        <div class="lg:col-span-1 grid grid-cols-2 ">
+            <div class="relative flex justify-center items-center">
+                <button class="col-span-1 font-semibold flex justify-center" (click)="toggleFilter()" [class.active]="showFilter">
+                    <img
+                        alt="Filter Icon"
+                        src="assets/icons/filter.png"
+                        class="w-6 h-7"
+                    />
+                    {{ 'filter' | translate }}
+                </button>
+                <div *ngIf="showFilter" class="rounded-[10px] text-[10px] absolute top-[120px] -left-[65px] transform -translate-y-1/2 bg-white border border-dotted border-[#E30039] py-1 px-2" style="z-index: 2;">
+                    <div class="flex">
+                        <h1 class="font-semibold mr-2">Type</h1>
+                        <button 
+                            class="p-1 border border-solid border-black mr-2 rounded-[10px]"
+                            [ngClass]="{ 'selected': typeFilter === 'PRFS' }"
+                            (click)="applyTypeFilter('PRFS')"
+                        >
+                            PRFS
+                        </button>
+                        <button 
+                            class="p-1 border border-solid border-black mr-2 rounded-[10px]"
+                            [ngClass]="{ 'selected': typeFilter === 'PRFM' }"
+                            (click)="applyTypeFilter('PRFM')"
+                        >
+                            PRFM
+                        </button>
+                        <button 
+                            class="p-1 border border-solid border-black mr-2 rounded-[10px]"
+                            [ngClass]="{ 'selected': typeFilter === 'PRMA' }"
+                            (click)="applyTypeFilter('PRMA')"
+                        >
+                            PRMA
+                        </button>
+                    </div>
+                    <div class="flex mt-2">
+                        <h1 class="font-semibold mr-2">Status</h1>
+                        <select class="ml-2 border border-black p-1"  [(ngModel)]="statusFilter" (ngModelChange)="applyStatusFilter($event)">
+                            <option value=0>All</option>
+                            <option *ngFor="let stt of status" [value]="stt.status_id" class="flex items-center justify-start">
+                                {{ stt.status_label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex justify-center mt-2">
+                        <button (click)="resetFilter()" class="bg-custom px-4 py-2 border border-solid border-black rounded-[10px] text-white">Reset</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative flex justify-center items-center">
+                <button class="col-span-1 font-semibold flex justify-center" (click)="toggleExport()" [class.active]="showExport">
+                    <img
+                        alt="Export Icon"
+                        src="assets/icons/export.png"
+                        class="w-6 h-7"
+                    />
+                    {{ 'export' | translate}}
+                </button>
+                <div *ngIf="showExport" class="z-40 text-[10px] rounded-[10px] absolute  top-[80px] -left-[65px] transform -translate-y-1/2 bg-white border border-dotted border-[#E30039] py-1 px-2">
+                    <div class="flex">
+                        <button
+                            [ngClass]="{ 'selected': exportType === 'csv' }" 
+                            (click)="exportTypeSet('csv')" 
+                            class="py-1 px-2 border border-solid border-black mr-2 rounded-[10px]">csv</button>
+                        <button 
+                            [ngClass]="{ 'selected': exportType === 'json' }" 
+                            (click)="exportTypeSet('json')" 
+                            class="py-1 px-2 border border-solid border-black mr-2 rounded-[10px]">json</button>
+                        <button 
+                            [ngClass]="{ 'selected': exportType === 'pdf' }" 
+                            (click)="exportTypeSet('pdf')" 
+                            class="py-1 px-2 border border-solid border-black mr-2 rounded-[10px]">pdf</button>
+                        <button 
+                            [ngClass]="{ 'selected': exportType === 'xls' }" 
+                            (click)="exportTypeSet('xls')" 
+                            class="py-1 px-2 border border-solid border-black mr-2 rounded-[10px]">xls</button>
+                    </div>
+                    <div class="flex justify-center items-center mt-2">
+                        <button 
+                            (click)="exportData()" 
+                            class="bg-custom font-semibold py-1 px-4 text-white rounded-[10px]">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="h-5/6 mx-4 lg:mx-10 overflow-y-scroll custom-scrollbar">
+        <div *ngIf="isLoading; else ticketList" class="flex items-center justify-center h-full bg-white">
+            <svg class="animate-spin h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.878 3.2 8.062l2.83-2.83zM12 20c-3.042 0-5.878-1.135-8.062-3.2l-2.83 2.83A7.962 7.962 0 0012 24h.001c4.418 0 8-3.582 8-8V12h-4v8z"></path>
+            </svg>
+            <p class="text-gray-600">Loading tickets...</p>
+        </div>
+
+        <ng-template #ticketList>
+            <app-ticket *ngFor="let ticket of tickets; let i = index" [data]="ticket"></app-ticket>
+        </ng-template>
+    </div>
+</div>
