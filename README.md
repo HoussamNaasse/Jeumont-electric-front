@@ -1,6 +1,14 @@
-#Installation
+# Installation
+
 git clone git link
-#Installation des packages
+
+## installation des packages
+
 npm i or yarn i
-#Lancer le projet
+
+## lancer l'application
+
 npm start
+
+
+
